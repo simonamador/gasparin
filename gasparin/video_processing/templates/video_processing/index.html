@@ -1,0 +1,12 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'style.css' %}" type="text/css" media="screen">
+
+<head>
+    <title>GASPARIN</title>
+</head>
+<body>
+    <div class="header">
+    <h1 >Video Live Detection</h1>
+    </div>
+    <img class = "live-vid" src = "{% url 'video_processing:video_feed' %}">
+</body>
