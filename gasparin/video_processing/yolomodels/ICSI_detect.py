@@ -1,11 +1,13 @@
 import ultralytics
+import torch
 
 
 class ICSI_detect:
   def __init__(self,
                path_detect = 'video_processing/yolomodels/det_model.pt',
                path_segment = 'video_processing/yolomodels/seg_model.pt'):
-
+     
+    self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     self.model_det = ultralytics.YOLO(path_detect)
     self.model_seg = ultralytics.YOLO(path_segment)
 

@@ -1,4 +1,5 @@
 import cv2
+import torch
 import os
 from video_processing.yolomodels import ICSI_detect
 from threading import Thread
@@ -7,6 +8,7 @@ import time
 class VideoCamera(object):
 	def __init__(self):
 		self.video = cv2.VideoCapture(0)
+		self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 	def __del__(self):
 		self.video.release()
@@ -24,6 +26,7 @@ class VideoCamera(object):
 class LiveWebCam(object):
 	def __init__(self):
 		self.model = ICSI_detect.ICSI_detect()
+		self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 		self.url = cv2.VideoCapture('video_processing/videos/ICSI4.mp4')
 		
@@ -57,6 +60,17 @@ class LiveWebCam(object):
 
 	def get_frame(self):
 		import numpy as np
+<<<<<<< HEAD
+		success,imgNp = self.url.read()
+		if success:
+			n_img, legend = self.model.ICSI_annotation(imgNp)
+			resize = cv2.cuda.resize(n_img, (640, 480), interpolation = cv2.INTER_LINEAR) 
+			ret, jpeg = cv2.imencode('.jpg', resize)
+			return jpeg.tobytes(), legend
+		else:
+			ret, jpeg = cv2.imencode('.jpg', np.zeros((480, 640)))
+			return jpeg.tobytes(), None
+=======
 		resize = cv2.resize(self.img, (640, 480), interpolation = cv2.INTER_LINEAR) 
 		ret, jpeg = cv2.imencode('.jpg', resize)
 		ret, leg_jpeg = cv2.imencode('.jpg', self.legend)
@@ -64,3 +78,4 @@ class LiveWebCam(object):
 		# else:
 		# 	ret, jpeg = cv2.imencode('.jpg', np.zeros((480, 640)))
 		# 	return jpeg.tobytes(), None
+>>>>>>> 364bee99ef0319249c66a9c8e4c2c887f648b4f8
