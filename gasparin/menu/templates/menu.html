@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Menú</title>
+    <style>
+        /* CSS */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            width: 300px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2 {
+            color: #333333;
+            text-align: center;
+        }
+
+        .options {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .option {
+            padding: 10px; /* Ajuste del tamaño del padding */
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #ffffff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .option:hover {
+            background-color: #0056b3;
+        }
+
+        #modelSelection {
+            margin-top: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333333;
+            text-align: left;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        button {
+            padding: 10px; /* Ajuste del tamaño del padding */
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #ffffff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Espacio entre los botones */
+        .buttons button + button {
+            margin-left: 10px;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="container">
+        <h2>Menú</h2>
+        <div class="options">
+            <button class="option" onclick="showModels('detector')">Detector</button>
+            <button class="option" onclick="showModels('segmentador')">Segmentador</button>
+            <button class="option" onclick="showModels('seguidor')">Seguidor</button>
+        </div>
+        <div id="modelSelection" class="hidden">
+            <label for="model">Seleccionar modelo:</label>
+            <select id="model">
+                <option value="YoloV5">YoloV5</option>
+                <option value="YoloV8">YoloV8</option>
+                <option value="YoloV9">YoloV9</option>
+            </select>
+            <div class="buttons">
+                <button onclick="connectCamera()">Conectar cámara</button>
+                <button onclick="uploadVideo()">Subir video</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showModels(option) {
+            var modelSelection = document.getElementById('modelSelection');
+            if (option === 'detector' || option === 'segmentador' || option === 'seguidor') {
+                modelSelection.classList.remove('hidden');
+            } else {
+                modelSelection.classList.add('hidden');
+            }
+        }
+
+        function connectCamera() {
+            window.location.href = '/video_processing/live_video_feed/';
+        }
+
+        function uploadVideo() {
+            window.location.href = '/video_processing/video_feed/';
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!-- register.html -->
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrarse</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'register.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h2>Registrarse</h2>
+        
+        <form method="post">
+            {% csrf_token %}
+            <label for="username">Nombre de usuario:</label><br>
+            <input type="text" id="username" name="username"><br>
+            <label for="password">Contraseña:</label><br>
+            <input type="password" id="password" name="password"><br><br>
+            <input type="submit" value="Registrarse">
+        </form>
+    </div>
+</body>
+</html>
