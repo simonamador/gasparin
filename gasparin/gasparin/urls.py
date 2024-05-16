@@ -24,12 +24,6 @@ from menu.views import menu_view
 
 urlpatterns = [
     path('video_processing/', include('video_processing.urls')),
-    path('register/', include('register.urls')),
-  
-
+    path('', include('register.urls')),
     path('admin/', admin.site.urls),
-    path('login/', login_view, name='login'), 
-    path ('register/', register_view, name= 'register'),
-    path ('menu/', menu_view, name= 'menu'),
-
 ]

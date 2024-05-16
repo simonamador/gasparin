@@ -30,13 +30,6 @@ urlpatterns = [
     path('login/', login_view, name='login'),
     path('register/', register_view, name='register'),  
     path('menu/', menu_view, name='menu'),  
-    path('index/', index, name='index'),  
-    path('live/', live_video_feed, name='live'),  
-    path('video/', video_feed, name='video'),  
-    path('gen/', gen, name='gen'),  
-
-
-
-
+    path('video_processing/', index, name='stream'),  
 ]
 

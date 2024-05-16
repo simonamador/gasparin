@@ -221,8 +221,7 @@ class ICSI_detect:
 
       # Generate detection image
       detect_img = self.plot_sperm_detect(off_head, off_tail,
-      [box[2]-box[0], box[3]-box[1]], n_img, det_plot.copy()
-      # img.copy()
+      [box[2]-box[0], box[3]-box[1]], n_img, img.copy()
       )
 
       return detect_img, legend
