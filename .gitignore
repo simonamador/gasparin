@@ -1,4 +1,5 @@
 gasparin-venv
+gasparin_venv
 gasparin/video_processing/videos
 gasparin/video_processing/yolomodels/*.pt
 
