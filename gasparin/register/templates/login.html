@@ -1,0 +1,92 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Iniciar sesión</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'login.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h2>Iniciar sesión</h2>
+        
+        {% if registration_message %}
+        <p>{{ registration_message }}</p>
+        {% endif %}
+        
+        <form method="post">
+            {% csrf_token %}
+            <label for="username">Nombre de usuario:</label><br>
+            <input type="text" id="username" name="username"><br>
+            <label for="password">Contraseña:</label><br>
+            <input type="password" id="password" name="password"><br><br>
+            <input type="submit" value="Iniciar sesión">
+        </form>
+        <p>¿No tienes una cuenta? <a href="{% url 'register' %}">Regístrate aquí</a>.</p>
+    </div>
+</body>
+</html>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    width: 300px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h2 {
+    color: #333333;
+    text-align: center; /* Añadido para centrar el texto */
+}
+
+form {
+    margin-top: 20px;
+    width: 100%; /* Asegurar que el formulario ocupe todo el ancho */
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333333;
+    text-align: left;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+input[type="submit"] {
+    background-color: #007bff;
+    border: none;
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+</style>

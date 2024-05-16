@@ -1,5 +1,5 @@
 """
-URL configuration for gasparin project.
+URL configuration for gasparin_django project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.0/topics/http/urls/
@@ -14,22 +14,29 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+# urls.py
+
 from django.contrib import admin
-from django.urls import include, path
-from register.auth_logic import login_view  
-from register.register_logic import register_view  
+from django.urls import path
+from .auth_logic import login_view
+from .register_logic import register_view
 from menu.views import menu_view
+from video_processing.views import index, live_video_feed, video_feed, gen
 
 
 
 urlpatterns = [
-    path('video_processing/', include('video_processing.urls')),
-    path('register/', include('register.urls')),
-  
-
     path('admin/', admin.site.urls),
-    path('login/', login_view, name='login'), 
-    path ('register/', register_view, name= 'register'),
-    path ('menu/', menu_view, name= 'menu'),
+    path('login/', login_view, name='login'),
+    path('register/', register_view, name='register'),  
+    path('menu/', menu_view, name='menu'),  
+    path('index/', index, name='index'),  
+    path('live/', live_video_feed, name='live'),  
+    path('video/', video_feed, name='video'),  
+    path('gen/', gen, name='gen'),  
+
+
+
 
 ]
+
