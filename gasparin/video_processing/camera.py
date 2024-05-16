@@ -1,10 +1,12 @@
 import cv2
+import torch
 import os
 from video_processing.yolomodels import ICSI_detect
 
 class VideoCamera(object):
 	def __init__(self):
 		self.video = cv2.VideoCapture(0)
+		self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 	def __del__(self):
 		self.video.release()
@@ -23,6 +25,7 @@ class LiveWebCam(object):
 	def __init__(self):
 		self.url = cv2.VideoCapture('video_processing/videos/ICSI3.mp4')
 		self.model = ICSI_detect.ICSI_detect()
+		self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 	def __del__(self):
 		cv2.destroyAllWindows()
@@ -32,7 +35,7 @@ class LiveWebCam(object):
 		success,imgNp = self.url.read()
 		if success:
 			n_img, legend = self.model.ICSI_annotation(imgNp)
-			resize = cv2.resize(n_img, (640, 480), interpolation = cv2.INTER_LINEAR) 
+			resize = cv2.cuda.resize(n_img, (640, 480), interpolation = cv2.INTER_LINEAR) 
 			ret, jpeg = cv2.imencode('.jpg', resize)
 			return jpeg.tobytes(), legend
 		else:
