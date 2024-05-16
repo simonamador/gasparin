@@ -87,22 +87,6 @@ class ICSI_detect:
 
   def plot_sperm_detect(self, c_head, c_tail, sperm_coord, sperm_box, img):
     import numpy as np
-    # # Generate circumference given a specific point
-    # def PointsInCircum(r, x, y):
-    #   import math
-    #   return [[math.cos(2*math.pi/r*j)*r+x,
-    #             math.sin(2*math.pi/r*j)*r+y] for j in range(0,100+1)]
-
-    # # Insert cirfumferences in image
-    # def center(img, r, x, y, color, color_scheme):
-    #   for i in range(0, 10, 1):
-    #     positions = [[int(a) for a in b] for b in PointsInCircum(r+i, x, y)]
-    #     for (nx,ny) in positions:
-    #       img[nx, ny, 0] = color_scheme[color][0]
-    #       img[nx, ny, 1] = color_scheme[color][1]
-    #       img[nx, ny, 2] = color_scheme[color][2]
-    #   return img
-
     # Insert cirfumferences in image
     def pil_center(img, r, x, y, color, color_scheme):
       from PIL import Image, ImageDraw
@@ -148,24 +132,29 @@ class ICSI_detect:
     import numpy as np
     from PIL import Image, ImageDraw
     img = Image.fromarray(results[0].orig_img.copy())
+    final_legend = Image.fromarray(np.zeros((200,240), dtype=np.uint8)).convert("RGB")
+    
     names = results[0].names
     values = results[0].boxes.cls.tolist()
     labels = [names[int(val)] for val in values]
     boxes = results[0].boxes.xyxy.cpu().numpy().astype(int)
 
     draw = ImageDraw.Draw(img)
+    draw_leg = ImageDraw.Draw(final_legend)
     color = [self.label2color[x] for x in labels]
     legend = dict(zip(set(labels),set(color)))
 
-
     for i, box in enumerate(boxes):
-      color = legend[labels[i]]
+      color = self.color_scheme[legend[labels[i]]]
       # for r in range(0,10,1):
       x1, y1, x2, y2 = box
-      draw.rectangle([(x1,y1),(x2,y2)], outline = self.color_scheme[color], width = 5)
+      draw.rectangle([(x1,y1),(x2,y2)], outline = color, width = 5)
 
-    return np.array(img), legend
+      [y, x] = [10+50*i, 10]
+      draw_leg.rectangle([(x,y),(x+25,y+25)], fill = color, width = 5)
+      draw_leg.text([x+30,y+13], labels[i])
 
+    return np.array(img), np.array(final_legend)
   # Function to resize detected sperm box to a 420x380 size, for segmentation
   #   model, by adding zero-padding or cutting image.
   # Inputs: Sperm box image, new width, new height
@@ -198,7 +187,7 @@ class ICSI_detect:
     results = self.model_det.predict(image, conf=.5)
     img = results[0].orig_img
     data = np.array(results[0].boxes.data.tolist())
-    x, legend = self.plot(results)
+    det_plot, legend = self.plot(results)
 
     if len(data)>0:
 
@@ -232,7 +221,9 @@ class ICSI_detect:
 
       # Generate detection image
       detect_img = self.plot_sperm_detect(off_head, off_tail,
-      [box[2]-box[0], box[3]-box[1]], n_img, img.copy())
+      [box[2]-box[0], box[3]-box[1]], n_img, det_plot.copy()
+      # img.copy()
+      )
 
       return detect_img, legend
 
@@ -243,6 +234,11 @@ class ICSI_detect:
     import numpy as np
 
     # Sperm detect
-    results = self.model_det.predict(image, conf=.5)
-    img, legend = self.plot(results)
-    return img, legend
+    results = self.model_det.predict(image, conf=.5, stream=True)
+    results_list = list(results)  # Convert the generator to a list
+    if results_list:  # Check if results are not empty
+        img, legend = self.plot(results_list)
+        return img, legend
+    else:
+        # Handle the case when no results are returned
+        return image, np.zeros((200, 240, 3), dtype=np.uint8)

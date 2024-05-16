@@ -10,10 +10,30 @@ body {
     text-align: center;
   }
 
-.live-vid {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 20px;
-    width: 50%;
-    }
+.video {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 20px auto;
+    width: 80%;
+    flex-wrap: nowrap; /* Ensure items don't wrap to the next line */
+}
+
+.stream {
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+.stream img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.stream:first-child {
+  flex: 1;
+}
+
+.stream:last-child {
+  flex: 2;
+}
