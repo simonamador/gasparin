@@ -26,7 +26,7 @@ from menu.views import menu_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', login_view, name='login'),
+    path('', login_view, name='login'),
     path('register/', register_view, name='register'),  
     path('menu/', menu_view, name='menu'),  
 

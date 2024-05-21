@@ -11,6 +11,10 @@
         {
             "username": "usuario3",
             "password": "contrase\u00c3\u00b1a3"
+        },
+        {
+            "username": "simonamador",
+            "password": "password"
         }
     ]
 }
