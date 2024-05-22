@@ -35,15 +35,12 @@ class VideoCamera(object):
 		ret, jpeg = cv2.imencode('.jpg', frame_flip)
 		return jpeg.tobytes(), legend
 
-
-class LiveWebCam(object):
+class Live_from_Video(object):
 	def __init__(self):
 		self.model = ICSI_detect.ICSI_detect()
 		self.device = device
 		self.url = cv2.VideoCapture('video_processing/videos/ICSI3.mp4')
-		
-		print(self.url.get(cv2.CAP_PROP_FPS))
-		
+				
 		self.url.set(cv2.CAP_PROP_FPS, 10)
 		self.frame = 0
 
