@@ -8,4 +8,5 @@ urlpatterns = [
     path("video_feed", views.video_feed, name="video_feed"),
     path("live_video_feed", views.live_video_feed, name="live_video_feed"),
     path("legend_feed", views.legend_feed, name="legend_feed"),
+    path("legend_live", views.legend_live, name="legend_live"),
 ]

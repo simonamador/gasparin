@@ -16,9 +16,10 @@ context = cl.Context([device])
 queue = cl.CommandQueue(context)
 
 
-class VideoCamera(object):
+class Live_from_Video(object):
 	def __init__(self):
-		self.video = cv2.VideoCapture(0)
+		self.video = cv2.VideoCapture(1)
+		self.model = ICSI_detect.ICSI_detect()
 		self.device = device
 
 
@@ -26,6 +27,8 @@ class VideoCamera(object):
 		self.video.release()
 
 	def get_frame(self):
+		if not self.video.isOpened():
+			raise IOError("Cannot open webcam")
 		success, image = self.video.read()
 		# We are using Motion JPEG, but OpenCV defaults to capture raw images,
 		# so we must encode it into JPEG in order to correctly display the
@@ -35,7 +38,7 @@ class VideoCamera(object):
 		ret, jpeg = cv2.imencode('.jpg', frame_flip)
 		return jpeg.tobytes(), legend
 
-class Live_from_Video(object):
+class VideoCamera(object):
 	def __init__(self):
 		self.model = ICSI_detect.ICSI_detect()
 		self.device = device

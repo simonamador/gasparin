@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import StreamingHttpResponse, HttpResponse
-from video_processing.camera import VideoCamera, LiveWebCam
+from video_processing.camera import VideoCamera, Live_from_Video
 
 # Create your views here.
 def index(request):
@@ -19,13 +19,17 @@ def legend_gen(camera):
 		 			b'Content-Type: image/jpeg\r\n\r\n' + legend + b'\r\n\r\n')
 		
 def live_video_feed(request):
-	return StreamingHttpResponse(gen(VideoCamera()),
+	return StreamingHttpResponse(gen(Live_from_Video()),
 					content_type='multipart/x-mixed-replace; boundary=frame')
 
 def video_feed(request):
-	return StreamingHttpResponse(gen(LiveWebCam()),
+	return StreamingHttpResponse(gen(VideoCamera()),
 					content_type='multipart/x-mixed-replace; boundary=frame')
 
 def legend_feed(request):
-	return StreamingHttpResponse(legend_gen(LiveWebCam()),
+	return StreamingHttpResponse(legend_gen(VideoCamera()),
+					content_type='multipart/x-mixed-replace; boundary=frame')
+
+def legend_live(request):
+	return StreamingHttpResponse(legend_gen(Live_from_Video()),
 					content_type='multipart/x-mixed-replace; boundary=frame')
