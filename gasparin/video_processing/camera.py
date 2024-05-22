@@ -1,14 +1,26 @@
 import cv2
-import torch
+import pyopencl as cl
+import numpy as np
 import os
 from video_processing.yolomodels import ICSI_detect
 from threading import Thread
 import time
 
+
+# Initialize OpenCL context and queue
+platforms = cl.get_platforms()
+# Select the first platform and the first GPU device
+platform = platforms[0]
+device = platform.get_devices()[0]
+context = cl.Context([device])
+queue = cl.CommandQueue(context)
+
+
 class VideoCamera(object):
 	def __init__(self):
 		self.video = cv2.VideoCapture(0)
-		self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+		self.device = device
+
 
 	def __del__(self):
 		self.video.release()
@@ -23,11 +35,11 @@ class VideoCamera(object):
 		ret, jpeg = cv2.imencode('.jpg', frame_flip)
 		return jpeg.tobytes(), legend
 
+
 class LiveWebCam(object):
 	def __init__(self):
 		self.model = ICSI_detect.ICSI_detect()
-		self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
+		self.device = device
 		self.url = cv2.VideoCapture('video_processing/videos/ICSI3.mp4')
 		
 		print(self.url.get(cv2.CAP_PROP_FPS))
@@ -67,3 +79,7 @@ class LiveWebCam(object):
 		# else:
 		# 	ret, jpeg = cv2.imencode('.jpg', np.zeros((480, 640)))
 		# 	return jpeg.tobytes(), None
+
+# Helper function to create an OpenCL buffer from a numpy array
+def create_cl_buffer(context, array, flags=cl.mem_flags.READ_WRITE):
+    return cl.Buffer(context, flags | cl.mem_flags.COPY_HOST_PTR, hostbuf=array)
