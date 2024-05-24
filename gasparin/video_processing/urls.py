@@ -10,3 +10,4 @@ urlpatterns = [
     path("legend_feed", views.legend_feed, name="legend_feed"),
     path("legend_live", views.legend_live, name="legend_live"),
 ]
+ 

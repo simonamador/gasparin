@@ -103,47 +103,51 @@
         }
     </style>
 
-</head>
+</head> 
 <body>
     <div class="container">
         <h2>Menú</h2>
         <div class="options">
-            <button class="option" onclick="showModels('detector')">ICSI</button>
-            <button class="option" onclick="showModels('segmentador')">Seleccionar esperma</button>
-            <button class="option" onclick="showModels('seguidor')">Inmovilizar esperma</button>
+            <form id="mainForm" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="taskInput" name="task" value="">
+                <input type="hidden" id="modelInput" name="model" value="">
+                <input type="hidden" id="visualInput" name="visual" value="">
+                <button type="button" class="option" onclick="setTaskAndShowModels('ICSI')">ICSI</button>
+                <button type="button" class="option" onclick="setTaskAndShowModels('Seleccionar esperma')">Seleccionar esperma</button>
+                <button type="button" class="option" onclick="setTaskAndShowModels('Inmovilizar esperma')">Inmovilizar esperma</button>
+            </form>
         </div>
         <div id="modelSelection" class="hidden">
             <label for="model">Seleccionar modelo:</label>
-            <select id="model">
+            <select id="model" onchange="setModel()">
+                <option value="">--Seleccione un modelo--</option>
                 <option value="YoloV5">YoloV5</option>
                 <option value="YoloV8">YoloV8</option>
                 <option value="YoloV9">YoloV9</option>
             </select>
             <div class="buttons">
-                <button onclick="connectCamera()">Conectar cámara</button>
-                <button onclick="uploadVideo()">Subir video</button>
+                <button type="button" onclick="submitFormWithVisual('Live_video')">Conectar cámara</button>
+                <button type="button" onclick="submitFormWithVisual('Video')">Subir video</button>
             </div>
         </div>
     </div>
 
     <script>
-        function showModels(option) {
-            var modelSelection = document.getElementById('modelSelection');
-            if (option === 'detector' || option === 'segmentador' || option === 'seguidor') {
-                modelSelection.classList.remove('hidden');
-            } else {
-                modelSelection.classList.add('hidden');
-            }
+        function setTaskAndShowModels(task) {
+            document.getElementById('taskInput').value = task;
+            document.getElementById('modelSelection').classList.remove('hidden');
         }
 
-        function connectCamera() {
-            window.location.href = '/video_processing/';
+        function setModel() {
+            var model = document.getElementById('model').value;
+            document.getElementById('modelInput').value = model;
         }
 
-        function uploadVideo() {
-            window.location.href = '/video_processing/';
+        function submitFormWithVisual(visual) {
+            document.getElementById('visualInput').value = visual;
+            document.getElementById('mainForm').submit();
         }
-
     </script>
 </body>
 </html>

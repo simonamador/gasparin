@@ -4,7 +4,8 @@ import numpy as np
 import os
 from video_processing.yolomodels import ICSI_detect
 from threading import Thread
-import time
+from  gasparin.settings import BASE_DIR
+import json
 
 
 # Initialize OpenCL context and queue
@@ -22,6 +23,14 @@ class Live_from_Video(object):
 		self.model = ICSI_detect.ICSI_detect()
 		self.device = device
 
+		JSON_FILE_PATH = os.path.join(BASE_DIR, 'video_processing', 'yolomodels', 'config.json')
+		if os.path.exists(JSON_FILE_PATH):
+			with open(JSON_FILE_PATH, 'r') as file:
+				settings = json.load(file)
+				self.TASK_ID = settings['task']
+		else:
+			self.TASK_ID = 'ICSI'
+
 
 	def __del__(self):
 		self.video.release()
@@ -33,7 +42,10 @@ class Live_from_Video(object):
 		# We are using Motion JPEG, but OpenCV defaults to capture raw images,
 		# so we must encode it into JPEG in order to correctly display the
 		# video stream.
-		n_img, legend = self.model.ICSI_annotation(image)
+		if self.TASK_ID == 'Inmovilizar esperma':
+			n_img, legend = self.model.sperm_selector(image)
+		else:
+			n_img, legend = self.model.ICSI_annotation(image)
 		frame_flip = cv2.flip(n_img,1)
 		ret, jpeg = cv2.imencode('.jpg', frame_flip)
 		return jpeg.tobytes(), legend
@@ -42,7 +54,18 @@ class VideoCamera(object):
 	def __init__(self):
 		self.model = ICSI_detect.ICSI_detect()
 		self.device = device
-		self.url = cv2.VideoCapture('video_processing/videos/ICSI3.mp4')
+		JSON_FILE_PATH = os.path.join(BASE_DIR, 'video_processing', 'yolomodels', 'config.json')
+		if os.path.exists(JSON_FILE_PATH):
+			with open(JSON_FILE_PATH, 'r') as file:
+				settings = json.load(file)
+				self.TASK_ID = settings['task']
+		else:
+			self.TASK_ID = 'ICSI'
+
+		if self.TASK_ID == 'Inmovilizar esperma':
+			self.url = cv2.VideoCapture('video_processing/videos/ICSI4.mp4')
+		else:
+			self.url = cv2.VideoCapture('video_processing/videos/ICSI3.mp4')
 				
 		self.url.set(cv2.CAP_PROP_FPS, 10)
 		self.frame = 0
@@ -66,7 +89,10 @@ class VideoCamera(object):
 					break
 				counter +=1
 				if counter % self.FPS == 0:
-					self.img, self.legend = self.model.ICSI_annotation(frame)
+					if self.TASK_ID == 'Inmovilizar esperma':
+						self.img, self.legend = self.model.sperm_selector(frame)
+					else:
+						self.img, self.legend = self.model.ICSI_annotation(frame)
 			else:
 				self.img, self.legend = 0, 0
 

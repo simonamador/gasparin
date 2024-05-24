@@ -1,10 +1,23 @@
 from django.shortcuts import render
 from django.http import StreamingHttpResponse, HttpResponse
 from video_processing.camera import VideoCamera, Live_from_Video
+from gasparin.settings import BASE_DIR
+
+import os
+import json
+
+JSON_FILE_PATH = os.path.join(BASE_DIR, 'video_processing', 'yolomodels', 'config.json')
+
+def get_menu_options():
+    if os.path.exists(JSON_FILE_PATH):
+        with open(JSON_FILE_PATH, 'r') as file:
+            return json.load(file)
+    return {"task": "", "model": "", "visual": ""}
 
 # Create your views here.
 def index(request):
-	return render(request, 'video_processing/index.html')
+	menu_options = get_menu_options()
+	return render(request, 'video_processing/index.html',  {'menu_options': menu_options})
 
 def gen(camera):
 	while True:

@@ -1,5 +1,6 @@
 import cv2
 from time import sleep
+import matplotlib.pyplot as plt
 
 for i in range(2):
     cap = cv2.VideoCapture(i)
@@ -10,5 +11,5 @@ for i in range(2):
 cap = cv2.VideoCapture(1)
 while True:
     success, img = cap.read()   # Gives us our frame
-    cv2.imshow("Image", img)
-    cv2.waitKey(1) 
+    plt.imshow(img)
+    sleep(1)

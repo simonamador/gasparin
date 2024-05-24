@@ -8,6 +8,17 @@
     <div class="header">
     <h1 >Video Live Detection</h1>
     </div>
+    {% if  menu_options.visual == 'Video' %}
+        <div class="video">
+            <div class="stream">
+                <img class = "live-leg" src = "{% url 'video_processing:legend_feed' %}">
+            </div>
+            <span></span><span></span>
+            <div class="stream">    
+                <img class = "live-vid" src = "{% url 'video_processing:video_feed' %}">
+            </div>
+        </div>
+    {% else %}
     <div class="video">
         <div class="stream">
             <img class = "live-leg" src = "{% url 'video_processing:legend_live' %}">
@@ -17,4 +28,5 @@
             <img class = "live-vid" src = "{% url 'video_processing:live_video_feed' %}">
         </div>
     </div>
+    {% endif %}
 </body>

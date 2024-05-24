@@ -18,18 +18,13 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
-from .auth_logic import login_view
-from .register_logic import register_view
-from menu.views import menu_view
-from video_processing.views import index, live_video_feed, video_feed, gen
+from .views import menu_view
+from video_processing.views import index
 
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', login_view, name='login'),
-    path('register/', register_view, name='register'),  
-    path('menu/', menu_view, name='menu'),  
-    path('video_processing/', index, name='stream'),  
+    path('', menu_view, name='menu'),  
+    path('', index, name='stream'),  
 ]
-
