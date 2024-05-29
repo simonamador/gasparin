@@ -4,6 +4,7 @@ import numpy as np
 import os
 from video_processing.yolomodels import ICSI_detect
 from threading import Thread
+from time import sleep
 from  gasparin.settings import BASE_DIR
 import json
 
@@ -19,7 +20,7 @@ queue = cl.CommandQueue(context)
 
 class Live_from_Video(object):
 	def __init__(self):
-		self.video = cv2.VideoCapture(1)
+		self.video = cv2.VideoCapture(0)
 		self.model = ICSI_detect.ICSI_detect()
 		self.device = device
 
@@ -30,6 +31,7 @@ class Live_from_Video(object):
 				self.TASK_ID = settings['task']
 		else:
 			self.TASK_ID = 'ICSI'
+		sleep(1)
 
 
 	def __del__(self):
@@ -48,7 +50,8 @@ class Live_from_Video(object):
 			n_img, legend = self.model.ICSI_annotation(image)
 		frame_flip = cv2.flip(n_img,1)
 		ret, jpeg = cv2.imencode('.jpg', frame_flip)
-		return jpeg.tobytes(), legend
+		ret, leg_jpeg = cv2.imencode('.jpg', legend)
+		return jpeg.tobytes(), leg_jpeg.tobytes()
 
 class VideoCamera(object):
 	def __init__(self):
@@ -75,6 +78,7 @@ class VideoCamera(object):
 		self.thread = Thread(target=self.update, args=())
 		self.thread.daemon = True
 		self.thread.start()
+		sleep(1)
 
 	def __del__(self):
 		cv2.destroyAllWindows()

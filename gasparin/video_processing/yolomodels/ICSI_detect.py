@@ -195,39 +195,41 @@ class ICSI_detect:
 
       # Extract sperm box
       sperm_boxes = data[data[:,5] == 4]
-      box = sperm_boxes[sperm_boxes[:,4] == max(sperm_boxes[:,4])].astype(int)[0].tolist()
-      x = range(box[0],box[2])
-      y = range(box[1],box[3])
-      n_img = img.copy()[y, :, :][:, x, :]
+      if len(sperm_boxes)>0:
+        box = sperm_boxes[sperm_boxes[:,4] == max(sperm_boxes[:,4])].astype(int)[0].tolist()
+        x = range(box[0],box[2])
+        y = range(box[1],box[3])
+        n_img = img.copy()[y, :, :][:, x, :]
 
-      # Resize sperm box
-      seg_box, sl = self.resizing(n_img, 420, 380)
+        # Resize sperm box
+        seg_box, sl = self.resizing(n_img, 420, 380)
 
-      # Sperm box coordinates
-      offset_y, offset_x = sl[0].stop, sl[1].start
+        # Sperm box coordinates
+        offset_y, offset_x = sl[0].stop, sl[1].start
 
-      # Segment sperm
-      results2 = self.model_seg.predict(seg_box)
+        # Segment sperm
+        results2 = self.model_seg.predict(seg_box)
 
-      # Find center coordinates
-      c_h, c_t = self.coordinates(results2)
+        # Find center coordinates
+        c_h, c_t = self.coordinates(results2)
 
-      if c_t is not None:
-        off_tail = [box[0]+c_t[0]-offset_x, box[3]+c_t[1]-offset_y]
-        if c_h is not None:
-          off_head = [box[0]+c_h[0]-offset_x, box[3]+c_h[1]-offset_y]
+        if c_t is not None:
+          off_tail = [box[0]+c_t[0]-offset_x, box[3]+c_t[1]-offset_y]
+          if c_h is not None:
+            off_head = [box[0]+c_h[0]-offset_x, box[3]+c_h[1]-offset_y]
+          else:
+            off_head = None
         else:
-          off_head = None
+          off_tail, off_head = None, None
+
+        # Generate detection image
+        detect_img = self.plot_sperm_detect(off_head, off_tail,
+        [box[2]-box[0], box[3]-box[1]], n_img, img.copy()
+        )
+
+        return detect_img, legend
       else:
-        off_tail, off_head = None, None
-
-      # Generate detection image
-      detect_img = self.plot_sperm_detect(off_head, off_tail,
-      [box[2]-box[0], box[3]-box[1]], n_img, img.copy()
-      )
-
-      return detect_img, legend
-
+        return img, legend
     else:
       return img, legend
 
