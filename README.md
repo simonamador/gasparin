@@ -14,7 +14,7 @@ Design a software as a medical device to assist medical professionals in intracy
 
 The following platform is meant to assist embryologists through the use of computer vision in the following tasks:
 * Sperm selection
-* Sperm inmovilization
+* Sperm  immobilization
 * Sperm injection
 
 Through the use of two YOLO v8 models: one for multi-class detection and one for polygon segmentation.
@@ -24,7 +24,7 @@ For detection tasks involved in sperm selection and sperm injection, a YOLO v8 m
 ![Detection framework](/assets/detection_framework.png)
 Figure 1
 
-For sperm inmovilization tasks, the detection model was connected to a polygon segmentation YOLO v8 model, and the polygons were employed to calculate the mid-points of sperm head and tail.
+For sperm  immobilization tasks, the detection model was connected to a polygon segmentation YOLO v8 model, and the polygons were employed to calculate the mid-points of sperm head and tail.
 
 ![Midpoint framework](/assets/midpoint_framework.png)
 Figure 2
@@ -34,7 +34,9 @@ Figure 2
 This folder contains the jupyter files employed to train and validate the YOLO models. Training was done on both YOLO v5 and YOLO v8 models, for different parameters, and evaluated based on their Recall, Precission and F1.
 
 ## gasparin
-Django application for an in vitro fertilization (IVF) visual assistance medical device.
-
+Django application for an in vitro fertilization (IVF) visual assistance medical device. 
+* Offer sign-in and sign-up for users
+* Menu to select tasks (sperm selection, sperm immobilization, sperm injection), as well as model version and the option to conduct live video annotation or saved video annotation
+* Video annotation view, either for live or saved video
 ## tests
 Include codes for testing of camera, amd, and cuda.
