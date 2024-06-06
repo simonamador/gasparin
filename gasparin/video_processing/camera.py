@@ -20,7 +20,7 @@ queue = cl.CommandQueue(context)
 
 class Live_from_Video(object):
 	def __init__(self):
-		self.video = cv2.VideoCapture(0)
+		self.video = cv2.VideoCapture(1)
 		self.model = ICSI_detect.ICSI_detect()
 		self.device = device
 
